@@ -12,6 +12,8 @@
         <h1>주성고등학교</h1>
     </header>
 
+    <h1>시간표</h1>
+
     <div id="classPicker">
         <label for="gradeSelect">학년 선택:</label>
         <select id="gradeSelect">
@@ -33,7 +35,6 @@
             <option value="9">9반</option>
         </select>
 
-    <h1>시간표</h1>
     <table id="data-table">
         <thead>
             <tr>
@@ -108,7 +109,10 @@
     
                     for (let i = 1; i <= 7; i++) {
                         const row = tbody.insertRow();
-                        row.insertCell(0).innerText = i; // 교시
+                        const firstCell = row.insertCell(0);
+                        firstCell.innerText = i; // 교시
+                        firstCell.style.backgroundColor = '#FFDAB9'; // 배경색
+                        firstCell.style.color = '#A52A2A	'; // 텍스트 색상
     
                         row.insertCell(1).innerText = schedule[weekdays[0]][i] || ''; 
                         row.insertCell(2).innerText = schedule[weekdays[1]][i] || ''; 
@@ -123,7 +127,6 @@
                     console.error('API 호출 오류:', error);
             });
         }
-
         
 
         document.getElementById('gradeSelect').addEventListener('change', loadSchedule);
@@ -131,13 +134,56 @@
 
         // 초기 로드
         loadSchedule();
-        
-        
-        
-
-        
-        
     </script>
+    
+    <h1>오늘의 급식</h1>
+    <select id="meal-select" onchange="selectMeal()">
+        <option value="조식">조식</option>
+        <option value="중식">중식</option>
+        <option value="석식">석식</option>
+    </select>
+
+    <table>
+        <thead2>
+            <tr>
+                <th>식사명</th>
+                <th>급식메뉴</th>
+            </tr>
+        </thead2>
+        <tbody id="meal-table-body"></tbody>
+    </table>
+
+    <script>
+        const apiUrl2 = 'https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=39515f9e08674c3abc57e48ce8399383&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=M10&SD_SCHUL_CODE=8000201&MLSV_YMD=20240830';
+
+        async function fetchMeals() {
+            try {
+                const response = await fetch(apiUrl2);
+                const data = await response.json();
+
+                const meals = data.mealServiceDietInfo[1].row;
+                const mealTableBody = document.getElementById('meal-table-body');
+
+                meals.forEach(meal => {
+                    const row = document.createElement('tr');
+                    const mealNameCell = document.createElement('td');
+                    const dishNameCell = document.createElement('td');
+
+                    mealNameCell.textContent = meal.MMEAL_SC_NM;
+                    dishNameCell.textContent = meal.DDISH_NM;
+
+                    row.appendChild(mealNameCell);
+                    row.appendChild(dishNameCell);
+                    mealTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('급식 정보를 불러오는 데 오류가 발생했습니다:', error);
+            }
+        }
+
+        fetchMeals();
+    </script>
+    
     
 
 </body>
