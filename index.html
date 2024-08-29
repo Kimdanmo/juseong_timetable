@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>주성고등학교 시간표</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+    <header>
+        <img src="주성고 마크.png" alt="주성고 마크" id="school-logo">
+        <h1>주성고등학교</h1>
+    </header>
+
+    <div id="classPicker">
+        <label for="gradeSelect">학년 선택:</label>
+        <select id="gradeSelect">
+            <option value="1">1학년</option>
+            <option value="2">2학년</option>
+            <option value="3">3학년</option>
+        </select>
+
+        <label for="classSelect">반 선택:</label>
+        <select id="classSelect">
+            <option value="1">1반</option>
+            <option value="2">2반</option>
+            <option value="3">3반</option>
+            <option value="4">4반</option>
+            <option value="5">5반</option>
+            <option value="6">6반</option>
+            <option value="7">7반</option>
+            <option value="8">8반</option>
+            <option value="9">9반</option>
+        </select>
+
+    <h1>시간표</h1>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>교시</th>
+                <th>월</th>
+                <th>화</th>
+                <th>수</th>
+                <th>목</th>
+                <th>금</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- 데이터가 여기에 삽입됩니다. -->
+        </tbody>
+    </table>
+
+    <script>
+        function getWeekdays() {
+            const today = new Date();
+            const dayOfWeek = today.getDay(); // 0: 일요일, 1: 월요일, ..., 6: 토요일
+            const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // 월요일까지의 오프셋
+            const monday = new Date(today);
+            monday.setDate(today.getDate() + mondayOffset); // 이번 주 월요일 날짜
+
+            const weekdays = [];
+            for (let i = 0; i < 5; i++) { // 월~금
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + i);
+        
+                // YYYYMMDD 형식으로 변환
+                const formattedDate = date.getFullYear().toString() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
+                weekdays.push(formattedDate); // 배열에 추가
+            }
+
+            return weekdays;
+        }
+
+        const weekdays = getWeekdays(); // 배열 생성
+
+        function loadSchedule() {
+            const tbody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+            tbody.innerHTML = ''; // 기존 데이터 비우기
+
+            const grade = document.getElementById('gradeSelect').value;
+            const classNum = document.getElementById('classSelect').value;
+
+            const apiUrl = `https://open.neis.go.kr/hub/hisTimetable?KEY=39515f9e08674c3abc57e48ce8399383&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=M10&SD_SCHUL_CODE=8000201&TI_FROM_YMD=${weekdays[0]}&TI_TO_YMD=${weekdays[4]}&GRADE=${grade}&CLASS_NM=${classNum}`;
+    
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const timetable = data.hisTimetable[1].row; // 데이터 구조에 따라 조정
+                    const tbody = document.getElementById('data-table').getElementsByTagName('tbody')[0];
+    
+                    const schedule = {};
+
+                    // 동적으로 날짜를 생성
+                    weekdays.forEach(date => {
+                        schedule[date] = {};
+                    });
+
+    
+                    timetable.forEach(item => {
+                        const date = item.ALL_TI_YMD; // 날짜
+                        const period = item.PERIO; // 교시
+                        const content = item.ITRT_CNTNT; // 수업 내용
+    
+                        if (schedule[date]) {
+                            schedule[date][period] = content;
+                        }
+                    });
+    
+                    for (let i = 1; i <= 7; i++) {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).innerText = i; // 교시
+    
+                        row.insertCell(1).innerText = schedule[weekdays[0]][i] || ''; 
+                        row.insertCell(2).innerText = schedule[weekdays[1]][i] || ''; 
+                        row.insertCell(3).innerText = schedule[weekdays[2]][i] || ''; 
+                        row.insertCell(4).innerText = schedule[weekdays[3]][i] || ''; 
+                        row.insertCell(5).innerText = schedule[weekdays[4]][i] || ''; 
+                    }
+                })
+                .catch(error => {
+                    console.error('API 호출 오류:', error);
+            });
+        }
+
+        
+        
+
+        document.getElementById('gradeSelect').addEventListener('change', loadSchedule);
+        document.getElementById('classSelect').addEventListener('change', loadSchedule);
+
+        // 초기 로드
+        loadSchedule();
+
+        
+    </script>
+    
+
+</body>
+</html>
