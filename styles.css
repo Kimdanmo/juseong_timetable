@@ -17,15 +17,16 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center; /* 수직 중앙 정렬 */
-    height: 100vh;
+    height: 150vh;
     background-color: white; /* 배경을 하얀색으로 변경 */
     font-family: goorm-sans-bold, sans-serif;
+    text-align: center;
 }
 
 header {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     font-family: HakgyoansimChulseokbuTTF-B, sans-serif;
 }
 
@@ -35,16 +36,21 @@ header {
     margin-right: 10px; /* 이미지와 텍스트 사이 여백 */
 }
 
-
 table {
-    width: 100%;
     border-collapse: collapse;
+    border-radius: 20px; /* 모서리 둥글게 만들기 */
+    overflow: hidden; /* 둥글게 만든 모서리가 잘리도록 설정 */
+    width: 90%; /* 전체 너비를 사용 */
+    height: 40%;
+    margin: 0 auto; /* 수평 중앙 정렬 */
 }
 
 th, td {
     border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
+    width: 100px; /* 각 셀의 너비를 일정하게 설정 */
+    height: 20px; /* 각 셀의 높이를 일정하게 설정 */
 }
 
 th {
@@ -55,12 +61,6 @@ th {
 td {
     background-color: #fff3c1ca;
     color: black; /* 수업 내용은 검정색 유지 */
-}
-
-table {
-    border-collapse: collapse;
-    border-radius: 20px; /* 모서리 둥글게 만들기 */
-    overflow: hidden; /* 둥글게 만든 모서리가 잘리도록 설정 */
 }
 
 
