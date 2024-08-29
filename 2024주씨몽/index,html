@@ -3,52 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>주성고등학교 시간표</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>학급 시간표</title>
 </head>
 <body>
-    <header>
-        <img src="주성고마크.png" alt="주성고 마크" id="school-logo">
-        <h1>주성고등학교</h1>
-    </header>
-    
-    <div id="date"></div>
+    <h2>학급 시간표 불러오기</h2>
 
-    <!-- 오늘 날짜 -->
-    <script>
-        const dateElement = document.getElementById('date');
-        const today = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-        dateElement.textContent = today.toLocaleDateString('ko-KR', options);
-    </script>
-
-    <!-- 학년 및 반 선택기 -->
-    <div id="classPicker" class="hidden">
-        <label for="gradeSelect">학년 선택:</label>
+    <div>
+        <label for="educationOffice">교육청 코드:</label>
+        <input type="text" id="educationOffice" placeholder="교육청 코드 입력">
+        
+        <label for="schoolCode">학교 코드:</label>
+        <input type="text" id="schoolCode" placeholder="학교 코드 입력">
+        
+        <label for="gradeSelect">학년:</label>
         <select id="gradeSelect">
             <option value="1">1학년</option>
             <option value="2">2학년</option>
             <option value="3">3학년</option>
         </select>
-
-        <label for="classSelect">반 선택:</label>
+        
+        <label for="classSelect">반:</label>
         <select id="classSelect">
             <option value="1">1반</option>
             <option value="2">2반</option>
             <option value="3">3반</option>
-            <option value="4">4반</option>
-            <option value="5">5반</option>
-            <option value="6">6반</option>
-            <option value="7">7반</option>
-            <option value="8">8반</option>
-            <option value="9">9반</option>
-            
         </select>
+        
+        <button id="loadTimetable">시간표 불러오기</button>
     </div>
 
     <div id="timetable">
-        <h2>주간 시간표</h2>
-        <table>
+        <h3>주간 시간표</h3>
+        <table border="1">
             <thead>
                 <tr>
                     <th>교시</th>
@@ -60,64 +46,49 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>2교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>3교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>4교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>5교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>6교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
-                <tr>
-                    <td>7교시</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                    <td contenteditable="true">수업 내용 입력</td>
-                </tr>
+                <!-- 시간표 내용이 여기에 들어감 -->
             </tbody>
         </table>
     </div>
+
+    <script>
+        document.getElementById('loadTimetable').addEventListener('click', function() {
+            const educationOffice = document.getElementById('educationOffice').value;
+            const schoolCode = document.getElementById('schoolCode').value;
+            const grade = document.getElementById('gradeSelect').value;
+            const classNum = document.getElementById('classSelect').value;
+
+            // 나이스 API 호출 URL (예시)
+            const apiUrl = `https://api.nice.go.kr/timetable?educationOffice=${educationOffice}&schoolCode=${schoolCode}&grade=${grade}&class=${classNum}`;
+
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('네트워크 응답이 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const tbody = document.querySelector('#timetable tbody');
+                    tbody.innerHTML = ''; // 기존 내용 초기화
+
+                    data.timetable.forEach((item, index) => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${index + 1}교시</td>
+                            <td>${item.mon || '없음'}</td>
+                            <td>${item.tue || '없음'}</td>
+                            <td>${item.wed || '없음'}</td>
+                            <td>${item.thu || '없음'}</td>
+                            <td>${item.fri || '없음'}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('API 호출 중 오류 발생:', error);
+                });
+        });
+    </script>
 </body>
 </html>
