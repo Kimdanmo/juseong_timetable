@@ -17,16 +17,35 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center; /* 수직 중앙 정렬 */
-    height: 120vh;
+    height: 100vh;
     background-color: white; /* 배경을 하얀색으로 변경 */
     font-family: goorm-sans-bold, sans-serif;
+    font-size: 15px;
     text-align: center;
+}
+
+#time-message{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* 수직 중앙 정렬 */
+    background-color: white; /* 배경을 하얀색으로 변경 */
+    font-family: goorm-sans-bold, sans-serif;
+    font-size: 30px;
+    
+}
+
+#meal-message{
+    background-color: white; /* 배경을 하얀색으로 변경 */
+    font-family: goorm-sans-bold, sans-serif;
+    font-size: 30px;
 }
 
 header {
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    font-size: 23px;
     font-family: HakgyoansimChulseokbuTTF-B, sans-serif;
 }
 
