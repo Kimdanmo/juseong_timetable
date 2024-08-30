@@ -12,7 +12,7 @@
         <h1>주성고등학교</h1>
     </header>
 
-    <h1>시간표</h1>
+    <h1 id="time-message">시간표</h1>
 
     <div id="classPicker">
         <label for="gradeSelect">학년 선택:</label>
@@ -136,12 +136,8 @@
         loadSchedule();
     </script>
     
-    <h1>오늘의 급식</h1>
-    <select id="meal-select" onchange="selectMeal()">
-        <option value="조식">조식</option>
-        <option value="중식">중식</option>
-        <option value="석식">석식</option>
-    </select>
+    <h1 id="meal-message">오늘의 급식</h1>
+
 
     <table id="meal-table">
         <thead>
@@ -154,7 +150,14 @@
     </table>
 
     <script>
-        const apiUrl2 = 'https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=39515f9e08674c3abc57e48ce8399383&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=M10&SD_SCHUL_CODE=8000201&MLSV_YMD=20240830';
+        const today2 = new Date();
+        const year = today2.getFullYear();
+        const month = String(today2.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+        const day = String(today2.getDate()).padStart(2, '0');
+
+        const formattedDate = `${year}${month}${day}`;
+
+        const apiUrl2 = `https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=39515f9e08674c3abc57e48ce8399383&Type=json&pIndex=1&pSize=100&ATPT_OFCDC_SC_CODE=M10&SD_SCHUL_CODE=8000201&MLSV_YMD=${formattedDate}`;
 
         async function fetchMeals() {
             try {
